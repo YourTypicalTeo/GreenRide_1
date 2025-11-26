@@ -65,9 +65,6 @@ public class UserServiceImpl implements UserService {
 
         User savedUser = userRepository.save(user);
 
-        // Send SMS after saving user
-        smsService.sendWelcomeSms(phoneNumber, username);
-
         return savedUser;
     }
 }

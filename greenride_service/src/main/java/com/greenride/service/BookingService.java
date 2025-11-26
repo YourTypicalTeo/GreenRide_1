@@ -80,7 +80,7 @@ public class BookingService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Booking is already cancelled.");
         }
 
-        // Rule: 10 Minute Cutoff
+
         LocalDateTime departureTime = booking.getRide().getDepartureTime();
         long minutesUntilDeparture = Duration.between(LocalDateTime.now(), departureTime).toMinutes();
 
