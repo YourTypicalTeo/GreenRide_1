@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Logout</title>
+</head>
+<body>
+
+<div layout:fragment="main" class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card p-5 text-center">
+            <h2 class="mb-4">Ready to leave?</h2>
+            <p>We hope to see you again soon.</p>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn btn-danger w-100">Confirm Logout</button>
+            </form>
+
+            <div class="mt-3">
+                <a th:href="@{/rides}" class="btn btn-link">Cancel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

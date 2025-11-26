@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Register</title>
+</head>
+<body>
+
+<div layout:fragment="main" class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card p-4">
+            <h2 class="text-center mb-4">Create Account</h2>
+
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <form th:action="@{/register}" th:object="${registerRequest}" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" th:field="*{username}" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" th:field="*{email}" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Phone Number (with country code)</label>
+                    <input type="tel" th:field="*{phoneNumber}" class="form-control" placeholder="+306912345678" required>
+                    <div class="form-text">We will send a welcome SMS to this number.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" th:field="*{password}" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Register</button>
+            </form>
+
+            <div class="text-center mt-3">
+                <a th:href="@{/login}">Already have an account? Login</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

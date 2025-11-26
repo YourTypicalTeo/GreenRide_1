@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>My Bookings</title>
+</head>
+<body>
+
+<div layout:fragment="main">
+    <h2 class="mb-4 text-success">My Bookings</h2>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+            <tr>
+                <th>Date</th>
+                <th>Route</th>
+                <th>Driver</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="booking : ${bookings}">
+                <td th:text="${#temporals.format(booking.ride.departureTime, 'dd MMM HH:mm')}">Date</td>
+                <td>
+                    <span th:text="${booking.ride.startLocation}">Start</span>
+                    <i class="bi bi-arrow-right-short">➝</i>
+                    <span th:text="${booking.ride.destination}">Dest</span>
+                </td>
+                <td th:text="${booking.ride.driver.username}">Driver</td>
+                <td>
+                        <span th:class="'badge ' + (${booking.status} == 'CONFIRMED' ? 'bg-success' : 'bg-secondary')"
+                              th:text="${booking.status}">Status</span>
+                </td>
+                <td>
+                    <button th:if="${booking.status} == 'CONFIRMED'"
+                            class="btn btn-sm btn-outline-danger"
+                            th:onclick="'cancelBooking(' + ${booking.id} + ')'">
+                        Cancel
+                    </button>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(bookings)}">
+                <td colspan="5" class="text-center text-muted py-4">
+                    You haven't booked any rides yet. <a th:href="@{/rides}">Find one now!</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function cancelBooking(bookingId) {
+            if(!confirm("Are you sure you want to cancel this booking?")) return;
+
+            fetch(`/api/v1/rides/bookings/${bookingId}`, {
+                method: 'DELETE'
+            })
+                .then(async response => {
+                    if (response.ok) {
+                        alert("Booking Cancelled.");
+                        window.location.reload();
+                    } else {
+                        const text = await response.text();
+                        alert("Error: " + text);
+                    }
+                });
+        }
+    </script>
+</div>
+
+</body>
+</html>

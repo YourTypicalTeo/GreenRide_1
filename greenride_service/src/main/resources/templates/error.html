@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Error</title>
+</head>
+<body>
+
+<div layout:fragment="main" class="text-center py-5">
+    <div class="card shadow-lg d-inline-block p-5 border-danger">
+        <h1 class="display-1 text-danger fw-bold">Oops!</h1>
+        <h3 class="mb-4">Something went wrong.</h3>
+
+        <p class="lead text-muted mb-4">
+            We couldn't process your request. It might be a bad link or a temporary glitch.
+        </p>
+
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="/" class="btn btn-primary btn-lg px-4 gap-3">Go Home</a>
+            <a href="javascript:history.back()" class="btn btn-outline-secondary btn-lg px-4">Go Back</a>
+        </div>
+
+        <div class="mt-5 text-start" th:if="${timestamp}">
+            <hr>
+            <small class="text-muted">
+                <strong>Status:</strong> <span th:text="${status}">500</span><br>
+                <strong>Error:</strong> <span th:text="${error}">Internal Server Error</span><br>
+                <strong>Message:</strong> <span th:text="${message}">No message available</span>
+            </small>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Offer a Ride</title>
+</head>
+<body>
+
+<div layout:fragment="main" class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card p-4">
+            <h2 class="text-center mb-4 text-success">Offer a Ride</h2>
+
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <form th:action="@{/rides/create}" th:object="${createRideDTO}" method="post">
+
+                <div class="mb-3">
+                    <label class="form-label">Starting Location</label>
+                    <input type="text" th:field="*{startLocation}" class="form-control" placeholder="e.g. Syntagma Square" required>
+                    <div class="text-danger small" th:if="${#fields.hasErrors('startLocation')}" th:errors="*{startLocation}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Destination</label>
+                    <input type="text" th:field="*{destination}" class="form-control" placeholder="e.g. Harokopio University" required>
+                    <div class="text-danger small" th:if="${#fields.hasErrors('destination')}" th:errors="*{destination}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Departure Time</label>
+                    <input type="datetime-local" th:field="*{departureTime}" class="form-control" required>
+                    <div class="form-text">Must be in the future.</div>
+                    <div class="text-danger small" th:if="${#fields.hasErrors('departureTime')}" th:errors="*{departureTime}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Available Seats</label>
+                    <input type="number" th:field="*{availableSeats}" class="form-control" min="1" max="8" required>
+                    <div class="text-danger small" th:if="${#fields.hasErrors('availableSeats')}" th:errors="*{availableSeats}"></div>
+                </div>
+
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-success">Publish Ride</button>
+                    <a th:href="@{/rides}" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

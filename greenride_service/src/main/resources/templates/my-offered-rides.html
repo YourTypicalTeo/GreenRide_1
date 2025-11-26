@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>My Offered Rides</title>
+</head>
+<body>
+
+<div layout:fragment="main">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-success">My Offered Rides</h2>
+        <a th:href="@{/rides/create}" class="btn btn-success">+ New Ride</a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col" th:each="ride : ${rides}">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${ride.destination}">Destination</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">From: <span th:text="${ride.startLocation}">Start</span></h6>
+
+                    <p class="card-text mt-3">
+                        <strong>Departure:</strong> <span th:text="${#temporals.format(ride.departureTime, 'dd MMM yyyy HH:mm')}">Time</span><br>
+                        <strong>Seats Left:</strong> <span th:text="${ride.availableSeats}">0</span>
+                    </p>
+                </div>
+                <div class="card-footer bg-transparent border-top-0">
+                    <small class="text-muted">Ride ID: <span th:text="${ride.id}">#</span></small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 text-center" th:if="${#lists.isEmpty(rides)}">
+            <p class="text-muted py-5">You haven't offered any rides yet.</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

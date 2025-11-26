@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Welcome</title>
+</head>
+<body>
+
+<div layout:fragment="main" class="text-center">
+    <div class="p-5 mb-4 bg-light rounded-3 border">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold text-success">GreenRide 🌿</h1>
+            <p class="col-md-8 fs-4 mx-auto">The smart, eco-friendly way to commute to the University. Share rides, save money, and reduce your carbon footprint.</p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mt-4">
+                <a th:href="@{/register}" class="btn btn-success btn-lg px-4 gap-3">Sign Up Now</a>
+                <a th:href="@{/login}" class="btn btn-outline-secondary btn-lg px-4">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row align-items-md-stretch">
+        <div class="col-md-6">
+            <div class="h-100 p-5 text-white bg-dark rounded-3">
+                <h2>For Drivers</h2>
+                <p>Driving to campus? Offer your empty seats to fellow students. Share fuel costs and meet new people.</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="h-100 p-5 bg-light border rounded-3">
+                <h2>For Passengers</h2>
+                <p>Need a lift? Find rides starting near you and arriving at the university on time.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

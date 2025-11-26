@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Login</title>
+</head>
+<body>
+
+<div layout:fragment="main" class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card p-4">
+            <h2 class="text-center mb-4">Login</h2>
+
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+            <div th:if="${message}" class="alert alert-info" th:text="${message}"></div>
+            <div th:if="${param.success}" class="alert alert-success">Registration successful! Please login.</div>
+
+            <form th:action="@{/login}" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" name="username" class="form-control" required autofocus>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-success w-100">Log In</button>
+            </form>
+
+            <div class="text-center mt-3">
+                <a th:href="@{/register}">Don't have an account? Register here</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

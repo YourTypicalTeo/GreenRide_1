@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Find a Ride</title>
+</head>
+<body>
+
+<div layout:fragment="main">
+
+    <div class="row mb-4 align-items-end">
+        <div class="col-md-8">
+            <h2 class="mb-3">Find a Ride</h2>
+            <form th:action="@{/rides}" method="get" class="d-flex gap-2">
+                <input type="text" name="start" class="form-control" placeholder="From (e.g. Athens)" th:value="${paramStart}">
+                <input type="text" name="dest" class="form-control" placeholder="To (e.g. University)" th:value="${paramDest}">
+                <button type="submit" class="btn btn-primary">Search</button>
+                <a th:href="@{/rides}" class="btn btn-outline-secondary">Clear</a>
+            </form>
+        </div>
+        <div class="col-md-4 text-end">
+            <a th:href="@{/rides/create}" class="btn btn-success">+ Offer a Ride</a>
+        </div>
+    </div>
+
+    <div th:if="${param.success}" class="alert alert-success">
+        Ride published successfully!
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        <div class="col" th:each="ride : ${rides}">
+            <div class="card h-100 border-success mb-3" style="border-width: 2px;">
+                <div class="card-header bg-transparent border-success d-flex justify-content-between">
+                    <span class="badge bg-success" th:text="${#temporals.format(ride.departureTime, 'dd MMM HH:mm')}">Date</span>
+                    <small class="text-muted">Driver: <span th:text="${ride.driver.username}">User</span></small>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-center">
+                        <span th:text="${ride.startLocation}">Start</span>
+                        <span> ➝ </span>
+                        <span th:text="${ride.destination}">Dest</span>
+                    </h5>
+                    <p class="card-text text-center mt-3">
+                        Seats Available:
+                        <strong class="fs-4" th:text="${ride.availableSeats}">3</strong>
+                    </p>
+                </div>
+                <div class="card-footer bg-transparent border-success text-center">
+                    <div th:if="${currentUser.username != ride.driver.username}">
+                        <form th:action="@{/api/v1/rides/{id}/bookings(id=${ride.id})}" method="post">
+                            <button type="button" class="btn btn-primary w-100"
+                                    th:onclick="'bookRide(' + ${ride.id} + ')'"
+                                    th:disabled="${ride.availableSeats < 1}">
+                                Book Seat
+                            </button>
+                        </form>
+                    </div>
+                    <div th:if="${currentUser.username == ride.driver.username}">
+                        <span class="badge bg-secondary">Your Ride</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 text-center" th:if="${#lists.isEmpty(rides)}">
+            <p class="text-muted fs-5">No rides found matching your search.</p>
+        </div>
+    </div>
+
+    <script>
+        function bookRide(rideId) {
+            if(!confirm("Confirm booking?")) return;
+
+            fetch(`/api/v1/rides/${rideId}/bookings`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(async response => {
+                    if (response.ok) {
+                        alert("Booking Confirmed!");
+                        window.location.reload();
+                    } else {
+                        const text = await response.text();
+                        alert("Error: " + text); // Shows our backend error message
+                    }
+                });
+        }
+    </script>
+
+</div>
+
+</body>
+</html>
