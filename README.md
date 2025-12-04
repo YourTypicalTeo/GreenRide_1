@@ -1,4 +1,4 @@
-#-- GreenRide 🌿--
+# GreenRide 🌿
 ## Features
 * **Role-Based Access:** Separate flows for Drivers, Passengers, and Administrators.
 * **Distributed Architecture:** Consumes an external **NOC Service** (simulated) for SMS notifications.
