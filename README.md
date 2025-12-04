@@ -1,7 +1,4 @@
-# GreenRide 🌿
-
-A distributed web service for university ride-sharing. This application connects students (drivers and passengers) to share commutes, split costs, and reduce carbon emissions.
-
+#-- GreenRide 🌿--
 ## Features
 * **Role-Based Access:** Separate flows for Drivers, Passengers, and Administrators.
 * **Distributed Architecture:** Consumes an external **NOC Service** (simulated) for SMS notifications.
@@ -41,9 +38,3 @@ A distributed web service for university ride-sharing. This application connects
 ## Default Accounts
 * **Admin User:** (Created automatically if you register a user and manually assign role `2` in H2 console)
 * **Test User:** Register a new account via the UI to get started.
-
-## Project Structure
-* `src/main/java/.../controller/web`: Thymeleaf UI Controllers.
-* `src/main/java/.../controller/api`: JSON REST API Controllers.
-* `src/main/java/.../service/adapter`: External service integration (Hexagonal Architecture).
-* `src/main/java/.../security`: JWT filters and Rate Limiting logic.
