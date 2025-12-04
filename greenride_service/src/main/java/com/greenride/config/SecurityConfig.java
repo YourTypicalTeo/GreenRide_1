@@ -1,7 +1,8 @@
 package com.greenride.config;
 
 import com.greenride.security.AuthEntryPointJwt;
-import com.greenride.security.AuthTokenFilter;
+import com.greenride.security.JwtAuthenticationFilter;
+import com.greenride.security.RateLimitFilter;
 import com.greenride.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,15 +27,18 @@ public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
-    private final AuthTokenFilter authTokenFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final RateLimitFilter rateLimitFilter;
 
     @Autowired
     public SecurityConfig(UserDetailsServiceImpl userDetailsService,
                           AuthEntryPointJwt unauthorizedHandler,
-                          AuthTokenFilter authTokenFilter) {
+                          JwtAuthenticationFilter jwtAuthenticationFilter,
+                          RateLimitFilter rateLimitFilter) {
         this.userDetailsService = userDetailsService;
         this.unauthorizedHandler = unauthorizedHandler;
-        this.authTokenFilter = authTokenFilter;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.rateLimitFilter = rateLimitFilter;
     }
 
     @Bean
@@ -68,12 +72,17 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll() // Allow login/register
                         .anyRequest().authenticated()
                 );
 
         http.authenticationProvider(authenticationProvider());
-        http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // 1. Rate Limit Filter (First line of defense)
+        http.addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // 2. JWT Filter (Authentication)
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -95,7 +104,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")        // We need to create this HTML page next
+                        .loginPage("/login")
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )

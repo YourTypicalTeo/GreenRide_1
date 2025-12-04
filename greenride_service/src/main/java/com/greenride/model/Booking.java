@@ -17,6 +17,10 @@ public class Booking {
     @Column(nullable = false)
     private String status; // e.g., "CONFIRMED", "CANCELLED"
 
+    // NEW FIELD: Tracks if we have already notified the user
+    @Column(name = "reminder_sent", nullable = false)
+    private boolean reminderSent = false;
+
     // Relationships
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ride_id", nullable = false)
@@ -29,7 +33,6 @@ public class Booking {
     // --- Constructors ---
     public Booking() {
     }
-
 
     // --- Getters and Setters ---
     public Long getId() {
@@ -54,6 +57,14 @@ public class Booking {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public boolean isReminderSent() {
+        return reminderSent;
+    }
+
+    public void setReminderSent(boolean reminderSent) {
+        this.reminderSent = reminderSent;
     }
 
     public Ride getRide() {

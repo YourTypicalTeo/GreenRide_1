@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -100,6 +101,25 @@ public class WebRideController {
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage()); // Business rule violation (e.g. limit reached)
             return "create-ride";
+        }
+    }
+
+    /**
+     * Handle booking a ride from the Web UI.
+     * This replaces the JS fetch call to solve the 401 Unauthorized issue.
+     */
+    @PostMapping("/rides/{rideId}/book")
+    public String handleWebBooking(@PathVariable Long rideId) {
+        try {
+            String username = currentUserProvider.getCurrentUser()
+                    .orElseThrow(() -> new RuntimeException("Not authenticated"))
+                    .username();
+
+            bookingService.bookRide(rideId, username);
+            return "redirect:/my-bookings?success=booked";
+        } catch (Exception e) {
+            // Redirect back to search with an error message
+            return "redirect:/rides?error=" + e.getMessage();
         }
     }
 

@@ -6,19 +6,21 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record RegisterRequest(
-        @NotBlank
-        @Size(min = 3, max = 20)
+        @NotBlank(message = "Username is required")
+        @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
         String username,
 
-        @NotBlank
-        @Email
+        @NotBlank(message = "Email is required")
+        @Email(message = "Please provide a valid email address")
         String email,
 
-        @NotBlank
-        @Size(min = 6)
+        @NotBlank(message = "Password is required")
+        @Size(min = 8, message = "Password must be at least 8 characters long")
+        @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!.*]).*$",
+                message = "Password must contain a digit, lowercase, uppercase, and a special character")
         String password,
 
-        @NotBlank
+        @NotBlank(message = "Phone number is required")
         @Pattern(regexp = "^\\+[1-9]\\d{1,14}$", message = "Phone number must start with + and country code (e.g. +3069...)")
         String phoneNumber
 ) {}

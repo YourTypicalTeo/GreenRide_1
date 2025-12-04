@@ -2,10 +2,12 @@ package com.greenride.controller.web;
 
 import com.greenride.dto.RegisterRequest;
 import com.greenride.service.UserService;
+import jakarta.validation.Valid; // <--- Import
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult; // <--- Import
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +27,6 @@ public class WebRegistrationController {
         if (AuthUtils.isAuthenticated(authentication)) {
             return "redirect:/";
         }
-        // Initialize DTO with 4 empty strings (username, email, password, phone)
         model.addAttribute("registerRequest", new RegisterRequest("", "", "", ""));
         return "register";
     }
@@ -33,11 +34,17 @@ public class WebRegistrationController {
     @PostMapping("/register")
     public String handleRegistration(
             Authentication authentication,
-            @ModelAttribute("registerRequest") RegisterRequest registerRequest,
+            @Valid @ModelAttribute("registerRequest") RegisterRequest registerRequest, // <--- Added @Valid
+            BindingResult bindingResult, // <--- Added BindingResult
             Model model) {
 
         if (AuthUtils.isAuthenticated(authentication)) {
             return "redirect:/";
+        }
+
+        // Fix: If password is too short, return to form with errors
+        if (bindingResult.hasErrors()) {
+            return "register";
         }
 
         try {

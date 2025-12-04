@@ -5,7 +5,7 @@ import com.greenride.model.Role;
 import com.greenride.model.User;
 import com.greenride.repository.RoleRepository;
 import com.greenride.repository.UserRepository;
-import com.greenride.service.port.SmsNotificationPort; // <--- Import the Port
+import com.greenride.service.port.SmsNotificationPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,13 +21,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final SmsNotificationPort smsNotificationPort; // <--- Use the Port Interface
+    private final SmsNotificationPort smsNotificationPort;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            RoleRepository roleRepository,
                            PasswordEncoder passwordEncoder,
-                           SmsNotificationPort smsNotificationPort) { // <--- Inject the Port
+                           SmsNotificationPort smsNotificationPort) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 
         User savedUser = userRepository.save(user);
 
-        // Send SMS using the new Port/Adapter
+        // Send Welcome SMS
         smsNotificationPort.sendSms(savedUser.getPhoneNumber(), "Welcome to GreenRide! Your account is active.");
 
         return savedUser;

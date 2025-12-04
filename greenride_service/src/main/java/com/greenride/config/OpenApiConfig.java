@@ -6,6 +6,7 @@ import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.springdoc.core.models.GroupedOpenApi; // <--- New Import
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,5 +33,18 @@ public class OpenApiConfig {
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
                                         .bearerFormat("JWT")));
+    }
+
+    /**
+     * Groups all REST API endpoints into a specific "API" category in Swagger.
+     * This hides the internal Web UI controllers from the API documentation.
+     */
+    @Bean
+    public GroupedOpenApi publicApi() {
+        return GroupedOpenApi.builder()
+                .group("greenride-api")
+                .packagesToScan("com.greenride.controller.api") // Scans only your API controllers
+                .pathsToMatch("/api/**") // Matches only API paths
+                .build();
     }
 }

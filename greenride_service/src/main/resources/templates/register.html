@@ -15,25 +15,35 @@
             <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
             <form th:action="@{/register}" th:object="${registerRequest}" method="post">
+
                 <div class="mb-3">
                     <label class="form-label">Username</label>
-                    <input type="text" th:field="*{username}" class="form-control" required>
+                    <input type="text" th:field="*{username}" class="form-control"
+                           th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Email</label>
-                    <input type="email" th:field="*{email}" class="form-control" required>
+                    <input type="email" th:field="*{email}" class="form-control"
+                           th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''" required>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Phone Number (with country code)</label>
-                    <input type="tel" th:field="*{phoneNumber}" class="form-control" placeholder="+306912345678" required>
+                    <input type="tel" th:field="*{phoneNumber}" class="form-control" placeholder="+306912345678"
+                           th:classappend="${#fields.hasErrors('phoneNumber')} ? 'is-invalid' : ''" required>
                     <div class="form-text">We will send a welcome SMS to this number.</div>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Password</label>
-                    <input type="password" th:field="*{password}" class="form-control" required>
+                    <input type="password" th:field="*{password}" class="form-control"
+                           th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''" required>
+                    <div class="form-text">Min 8 chars, 1 upper, 1 lower, 1 number, 1 special.</div>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">Register</button>
